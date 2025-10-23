@@ -3,161 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Learning Notebook</title>
+    <title>Word Learning App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Login Screen -->
     <div id="loginScreen" class="screen active">
-        <div class="notebook-page">
-            <div class="notebook-header">
-                <h1>📚 Word Learning Notebook</h1>
-                <p class="subtitle">Your personal language companion</p>
-            </div>
-            <div class="login-form">
-                <label for="usernameInput">Enter your name to begin</label>
-                <input type="text" id="usernameInput" placeholder="Your name..." class="notebook-input">
-                <button onclick="login()" class="btn btn-primary">Start Learning</button>
+        <div class="login-container">
+            <div class="login-content">
+                <div class="logo">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <rect width="48" height="48" rx="12" fill="currentColor"/>
+                        <path d="M24 12L24 36M12 24H36" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1>Word Learning App</h1>
+                <p class="login-subtitle">Build your vocabulary with systematic practice</p>
+                
+                <div class="login-form">
+                    <input 
+                        type="text" 
+                        id="usernameInput" 
+                        placeholder="Enter your username" 
+                        class="input-field"
+                        autocomplete="off"
+                    >
+                    <button onclick="login()" class="btn btn-primary btn-large">
+                        Continue
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Main App -->
     <div id="mainApp" class="screen">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="container">
-                <h1>📖 My Word Notebook</h1>
-                <div class="user-info">
-                    <span id="welcomeUser"></span>
-                    <button onclick="logout()" class="btn btn-small">Logout</button>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-small">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                        <rect width="48" height="48" rx="12" fill="currentColor"/>
+                        <path d="M24 12L24 36M12 24H36" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
                 </div>
+                <h2>Word App</h2>
             </div>
-        </header>
 
-        <!-- Navigation -->
-        <nav class="nav-tabs">
-            <button class="tab-btn active" onclick="showTab('dashboard')">Today's Practice</button>
-            <button class="tab-btn" onclick="showTab('library')">Word Library</button>
-            <button class="tab-btn" onclick="showTab('languages')">Languages</button>
-            <button class="tab-btn" onclick="showTab('addWord')">Add New Word</button>
-        </nav>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="showTab('dashboard')" data-tab="dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
 
-        <div class="container">
+                <button class="nav-item" onclick="showTab('library')" data-tab="library">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    <span>Library</span>
+                </button>
+
+                <button class="nav-item" onclick="showTab('languages')" data-tab="languages">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span>Languages</span>
+                </button>
+
+                <button class="nav-item" onclick="showTab('addWord')" data-tab="addWord">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    <span>Add Word</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">User</div>
+                    </div>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                    <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <button onclick="logout()" class="btn-icon" title="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
             <!-- Dashboard Tab -->
             <div id="dashboardTab" class="tab-content active">
-                <div class="stats-cards">
+                <div class="page-header">
+                    <h1>Today's Practice</h1>
+                    <p class="page-subtitle">Keep your learning streak going</p>
+                </div>
+
+                <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number" id="todayCount">0</div>
-                        <div class="stat-label">Words to Practice Today</div>
+                        <div class="stat-icon" style="background: rgba(185, 102, 71, 0.1); color: rgb(185, 102, 71);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="todayCount">0</div>
+                            <div class="stat-label">To Practice Today</div>
+                        </div>
                     </div>
+
                     <div class="stat-card">
-                        <div class="stat-number" id="totalWords">0</div>
-                        <div class="stat-label">Total Words</div>
+                        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: rgb(59, 130, 246);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalWords">0</div>
+                            <div class="stat-label">Total Words</div>
+                        </div>
                     </div>
+
                     <div class="stat-card">
-                        <div class="stat-number" id="completedWords">0</div>
-                        <div class="stat-label">Mastered Words</div>
+                        <div class="stat-icon" style="background: rgba(34, 197, 94, 0.1); color: rgb(34, 197, 94);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="completedWords">0</div>
+                            <div class="stat-label">Mastered Words</div>
+                        </div>
                     </div>
                 </div>
 
-                <h2 class="section-title">🔥 Practice Today</h2>
-                <div id="todayWordsList" class="words-grid"></div>
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Practice Now</h2>
+                    </div>
+                    <div id="todayWordsList" class="cards-grid"></div>
+                </div>
             </div>
 
             <!-- Library Tab -->
             <div id="libraryTab" class="tab-content">
-                <div class="library-header">
-                    <h2 class="section-title">📚 All Words</h2>
-                    <div class="filters">
-                        <select id="languageFilter" class="notebook-input" onchange="loadWords()">
+                <div class="page-header">
+                    <div>
+                        <h1>Word Library</h1>
+                        <p class="page-subtitle">All your saved words in one place</p>
+                    </div>
+                    <div class="header-actions">
+                        <select id="languageFilter" class="select-field" onchange="loadWords()">
                             <option value="">All Languages</option>
                         </select>
-                        <input type="text" id="searchInput" class="notebook-input" placeholder="Search words..." onkeyup="loadWords()" style="margin-left: 10px; max-width: 200px;">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="input-field" 
+                            placeholder="Search words..." 
+                            onkeyup="loadWords()"
+                        >
                     </div>
                 </div>
-                <div id="allWordsList" class="words-grid"></div>
+
+                <div id="allWordsList" class="cards-grid"></div>
             </div>
 
             <!-- Languages Tab -->
             <div id="languagesTab" class="tab-content">
-                <div class="centered-form">
-                    <h2 class="section-title">🌐 Manage Languages</h2>
-                    <div class="notebook-page">
+                <div class="page-header">
+                    <h1>Languages</h1>
+                    <p class="page-subtitle">Manage your learning languages</p>
+                </div>
+
+                <div class="section">
+                    <div class="form-card">
+                        <h3>Add New Language</h3>
                         <form id="addLanguageForm" onsubmit="addLanguage(event)">
                             <div class="form-group">
                                 <label for="languageNameInput">Language Name</label>
-                                <input type="text" id="languageNameInput" class="notebook-input" placeholder="e.g., English, Spanish..." required>
+                                <input 
+                                    type="text" 
+                                    id="languageNameInput" 
+                                    class="input-field" 
+                                    placeholder="e.g., English, Spanish, French..."
+                                    required
+                                >
                             </div>
                             <button type="submit" class="btn btn-primary">Add Language</button>
                         </form>
                     </div>
-                    
-                    <h3 class="section-title" style="margin-top: 40px;">Your Languages</h3>
-                    <div id="languagesList" class="languages-grid"></div>
+                </div>
+
+                <div class="section">
+                    <h2>Your Languages</h2>
+                    <div id="languagesList" class="cards-grid"></div>
                 </div>
             </div>
 
             <!-- Add Word Tab -->
             <div id="addWordTab" class="tab-content">
-                <div class="centered-form">
-                    <div class="notebook-page">
-                        <h2 class="section-title">✏️ Add New Word</h2>
-                        
-                        <div id="noLanguagesWarning" style="display: none; background: var(--accent-yellow); padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
-                            <h3>⚠️ No Languages Found</h3>
-                            <p style="margin: 10px 0;">Please add at least one language before creating words.</p>
-                            <button class="btn btn-primary" onclick="showTab('languages'); document.querySelectorAll('.tab-btn')[2].classList.add('active');">
-                                Go to Languages
-                            </button>
-                        </div>
-                        
-                        <form id="addWordForm" onsubmit="addWord(event)">
+                <div class="page-header">
+                    <h1>Add New Word</h1>
+                    <p class="page-subtitle">Expand your vocabulary</p>
+                </div>
+
+                <div id="noLanguagesWarning" class="alert alert-warning" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <div>
+                        <strong>No Languages Found</strong>
+                        <p>Please add at least one language before creating words.</p>
+                        <button class="btn btn-secondary" onclick="showTab('languages')">Go to Languages</button>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <form id="addWordForm" onsubmit="addWord(event)">
+                        <div class="form-row">
                             <div class="form-group">
-                                <label for="wordInput">Word</label>
-                                <input type="text" id="wordInput" class="notebook-input" required>
+                                <label for="wordInput">Word *</label>
+                                <input 
+                                    type="text" 
+                                    id="wordInput" 
+                                    class="input-field" 
+                                    placeholder="Enter the word"
+                                    required
+                                >
                             </div>
-                            
+
                             <div class="form-group">
-                                <label for="wordLanguageSelect">Language</label>
-                                <select id="wordLanguageSelect" class="notebook-input" required>
+                                <label for="wordLanguageSelect">Language *</label>
+                                <select id="wordLanguageSelect" class="select-field" required>
                                     <option value="">Select a language...</option>
                                 </select>
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="meaningInput">Meaning</label>
-                                <textarea id="meaningInput" class="notebook-textarea" rows="3" required></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Examples (Optional)</label>
-                                <textarea id="example1" class="notebook-textarea" placeholder="Example 1..." rows="2"></textarea>
-                                <textarea id="example2" class="notebook-textarea" placeholder="Example 2..." rows="2"></textarea>
-                                <textarea id="example3" class="notebook-textarea" placeholder="Example 3..." rows="2"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary" id="addWordBtn">Add to Notebook</button>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="meaningInput">Meaning *</label>
+                            <textarea 
+                                id="meaningInput" 
+                                class="textarea-field" 
+                                rows="3"
+                                placeholder="Enter the meaning or definition"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Examples (Optional)</label>
+                            <textarea 
+                                id="example1" 
+                                class="textarea-field" 
+                                rows="2"
+                                placeholder="Example 1..."
+                            ></textarea>
+                            <textarea 
+                                id="example2" 
+                                class="textarea-field" 
+                                rows="2"
+                                placeholder="Example 2..."
+                            ></textarea>
+                            <textarea 
+                                id="example3" 
+                                class="textarea-field" 
+                                rows="2"
+                                placeholder="Example 3..."
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large" id="addWordBtn">
+                            Add Word
+                        </button>
+                    </form>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Word Detail Modal -->
     <div id="wordModal" class="modal">
-        <div class="modal-content notebook-page">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalContent"></div>
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Word Details</h2>
+                <button class="btn-icon" onclick="closeModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent"></div>
         </div>
     </div>
 
     <!-- Practice Modal -->
     <div id="practiceModal" class="modal">
-        <div class="modal-content notebook-page practice-card">
-            <span class="close" onclick="closePracticeModal()">&times;</span>
-            <div id="practiceContent"></div>
+        <div class="modal-overlay" onclick="closePracticeModal()"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Practice</h2>
+                <button class="btn-icon" onclick="closePracticeModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="practiceContent"></div>
         </div>
     </div>
 
