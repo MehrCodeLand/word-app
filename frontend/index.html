@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Learning Notebook</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="notebook-page">
+            <div class="notebook-header">
+                <h1>📚 Word Learning Notebook</h1>
+                <p class="subtitle">Your personal language companion</p>
+            </div>
+            <div class="login-form">
+                <label for="usernameInput">Enter your name to begin</label>
+                <input type="text" id="usernameInput" placeholder="Your name..." class="notebook-input">
+                <button onclick="login()" class="btn btn-primary">Start Learning</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="screen">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <h1>📖 My Word Notebook</h1>
+                <div class="user-info">
+                    <span id="welcomeUser"></span>
+                    <button onclick="logout()" class="btn btn-small">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('dashboard')">Today's Practice</button>
+            <button class="tab-btn" onclick="showTab('library')">Word Library</button>
+            <button class="tab-btn" onclick="showTab('languages')">Languages</button>
+            <button class="tab-btn" onclick="showTab('addWord')">Add New Word</button>
+        </nav>
+
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <div id="dashboardTab" class="tab-content active">
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayCount">0</div>
+                        <div class="stat-label">Words to Practice Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalWords">0</div>
+                        <div class="stat-label">Total Words</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedWords">0</div>
+                        <div class="stat-label">Mastered Words</div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">🔥 Practice Today</h2>
+                <div id="todayWordsList" class="words-grid"></div>
+            </div>
+
+            <!-- Library Tab -->
+            <div id="libraryTab" class="tab-content">
+                <div class="library-header">
+                    <h2 class="section-title">📚 All Words</h2>
+                    <div class="filters">
+                        <select id="languageFilter" class="notebook-input" onchange="loadWords()">
+                            <option value="">All Languages</option>
+                        </select>
+                        <input type="text" id="searchInput" class="notebook-input" placeholder="Search words..." onkeyup="loadWords()" style="margin-left: 10px; max-width: 200px;">
+                    </div>
+                </div>
+                <div id="allWordsList" class="words-grid"></div>
+            </div>
+
+            <!-- Languages Tab -->
+            <div id="languagesTab" class="tab-content">
+                <div class="centered-form">
+                    <h2 class="section-title">🌐 Manage Languages</h2>
+                    <div class="notebook-page">
+                        <form id="addLanguageForm" onsubmit="addLanguage(event)">
+                            <div class="form-group">
+                                <label for="languageNameInput">Language Name</label>
+                                <input type="text" id="languageNameInput" class="notebook-input" placeholder="e.g., English, Spanish..." required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Language</button>
+                        </form>
+                    </div>
+                    
+                    <h3 class="section-title" style="margin-top: 40px;">Your Languages</h3>
+                    <div id="languagesList" class="languages-grid"></div>
+                </div>
+            </div>
+
+            <!-- Add Word Tab -->
+            <div id="addWordTab" class="tab-content">
+                <div class="centered-form">
+                    <div class="notebook-page">
+                        <h2 class="section-title">✏️ Add New Word</h2>
+                        
+                        <div id="noLanguagesWarning" style="display: none; background: var(--accent-yellow); padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                            <h3>⚠️ No Languages Found</h3>
+                            <p style="margin: 10px 0;">Please add at least one language before creating words.</p>
+                            <button class="btn btn-primary" onclick="showTab('languages'); document.querySelectorAll('.tab-btn')[2].classList.add('active');">
+                                Go to Languages
+                            </button>
+                        </div>
+                        
+                        <form id="addWordForm" onsubmit="addWord(event)">
+                            <div class="form-group">
+                                <label for="wordInput">Word</label>
+                                <input type="text" id="wordInput" class="notebook-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="wordLanguageSelect">Language</label>
+                                <select id="wordLanguageSelect" class="notebook-input" required>
+                                    <option value="">Select a language...</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="meaningInput">Meaning</label>
+                                <textarea id="meaningInput" class="notebook-textarea" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Examples (Optional)</label>
+                                <textarea id="example1" class="notebook-textarea" placeholder="Example 1..." rows="2"></textarea>
+                                <textarea id="example2" class="notebook-textarea" placeholder="Example 2..." rows="2"></textarea>
+                                <textarea id="example3" class="notebook-textarea" placeholder="Example 3..." rows="2"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" id="addWordBtn">Add to Notebook</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Word Detail Modal -->
+    <div id="wordModal" class="modal">
+        <div class="modal-content notebook-page">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Practice Modal -->
+    <div id="practiceModal" class="modal">
+        <div class="modal-content notebook-page practice-card">
+            <span class="close" onclick="closePracticeModal()">&times;</span>
+            <div id="practiceContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
